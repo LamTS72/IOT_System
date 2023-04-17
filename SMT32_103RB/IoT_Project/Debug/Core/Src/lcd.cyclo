@@ -1,0 +1,7 @@
+lcd.c:7:6:lcd_send_cmd	1
+lcd.c:20:6:lcd_send_data	1
+lcd.c:33:6:lcd_clear	1
+lcd.c:39:6:lcd_put_cur	3
+lcd.c:56:6:lcd_init	1
+lcd.c:76:6:lcd_send_string	2
+lcd.c:81:6:lcd_welcome	1

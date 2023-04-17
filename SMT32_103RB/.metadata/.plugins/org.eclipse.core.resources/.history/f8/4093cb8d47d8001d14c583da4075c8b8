@@ -1,0 +1,18 @@
+
+#ifndef INC_DH11_H_
+#define INC_DH11_H_
+
+#include "timer.h"
+#include "lcd.h"
+extern float temp_C;
+extern float humidity;
+uint32_t DWT_Delay_Init(void);
+void DH11_Init(void);
+void Set_Pin_Output (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
+void Set_Pin_Input (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
+void DHT11_Start(void);
+uint8_t DHT11_Check_Response(void);
+uint8_t DHT11_Read_Byte(void);
+void Read_from_DHT11(void);
+void Display_Data_from_DHT11(void);
+#endif /* INC_DH11_H_ */

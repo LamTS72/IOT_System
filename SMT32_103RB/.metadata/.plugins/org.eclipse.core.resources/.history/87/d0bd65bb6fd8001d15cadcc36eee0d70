@@ -1,0 +1,116 @@
+#include "dh11.h"
+
+
+uint8_t cmd_flag = C;
+uint8_t dht11_data[5];
+float humidity;
+float temp_C;
+float temp_F;
+int8_t Response = 0;
+char humid_buffer[20];
+char temp_buffer[20];
+
+void Set_Pin_Output (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
+{
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
+	GPIO_InitStruct.Pin = GPIO_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(GPIOx, &GPIO_InitStruct);
+}
+
+void Set_Pin_Input (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
+{
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
+	GPIO_InitStruct.Pin = GPIO_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(GPIOx, &GPIO_InitStruct);
+}
+
+void DHT11_Start(void){
+	 Set_Pin_Output(DH11_GPIO_Port,DH11_Pin);
+	 HAL_GPIO_WritePin(DH11_GPIO_Port,DH11_Pin, RESET);  // pull the pin low
+	 delay_us(18000);  // wait for at least 18ms
+	 HAL_GPIO_WritePin(DH11_GPIO_Port,DH11_Pin, SET);    // pull the pin high
+	 delay_us(20);     // wait for 20-40us
+	 Set_Pin_Input(DH11_GPIO_Port,DH11_Pin);
+}
+uint8_t DHT11_Check_Response(void){
+	uint8_t response = 0;
+	delay_us(40);
+	if (!(HAL_GPIO_ReadPin(DH11_GPIO_Port,DH11_Pin))){  // wait for the pin to go low
+		delay_us(80);
+	    if ((HAL_GPIO_ReadPin(DH11_GPIO_Port,DH11_Pin))){ // check if the pin is high
+	    	response = 1;
+	    }
+	}
+	while ((HAL_GPIO_ReadPin(DH11_GPIO_Port,DH11_Pin)));  // wait for the pin to go low again
+	return response;
+}
+uint8_t DHT11_Read_Byte(void){
+    uint8_t i, result = 0;
+    for (i = 0; i < 8; i++){
+        while (!(HAL_GPIO_ReadPin(DH11_GPIO_Port,DH11_Pin)));  // wait for the pin to go high
+        delay_us(40);  // wait for 40us
+        if ((HAL_GPIO_ReadPin(DH11_GPIO_Port,DH11_Pin)) == 0){ // check if the pin is low
+            result &= ~(1 << (7 - i));  // clear bit (7 - i)
+        }
+        else{
+            result |= (1 << (7 - i));   // set bit (7 - i)
+        }
+        while ((HAL_GPIO_ReadPin(DH11_GPIO_Port,DH11_Pin)));  // wait for the pin to go low again
+    }
+    return result;
+}
+
+void Read_from_DHT11(void){
+	DHT11_Start();
+
+	uint8_t try_time = 0;
+
+	Response =  DHT11_Check_Response();
+
+	while(Response == -1 && try_time < 3)
+	{
+		DHT11_Start();
+
+		Response = DHT11_Check_Response();
+
+		try_time++;
+	}
+
+	if(try_time < 3)
+	{
+		for (uint8_t i = 0; i < 5; i++)
+		{
+			dht11_data[i] = DHT11_Read_Byte();
+		}
+	}
+}
+
+void Display_Data_from_DHT11(void){
+	if(Response != -1){
+		humidity = (float)dht11_data[0] + (float)dht11_data[1]/10;
+		temp_C = (float)dht11_data[2] + (float)dht11_data[3]/10;
+		temp_F = temp_C * 1.8;
+		lcd_clear();
+		lcd_put_cur(0,0);
+		sprintf(humid_buffer,"Humidity: %.1f%%",humidity);
+		lcd_send_string(humid_buffer);
+		lcd_put_cur(1,0);
+		if(cmd_flag == C){
+			sprintf(temp_buffer,"Temp: %.1f%cC",temp_C,223 );
+			lcd_send_string(temp_buffer);
+		}
+		else{
+			sprintf(temp_buffer,"Temp: %.1f%cF",temp_F,223 );
+			lcd_send_string(temp_buffer);
+		}
+	}
+	else{
+		lcd_clear();
+		lcd_send_string("Not responsive");
+	}
+
+}

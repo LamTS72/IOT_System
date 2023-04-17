@@ -1,0 +1,20 @@
+22:43:40 **** Incremental Build of configuration Debug for project IoT_Project ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "IoT_Project.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\IoT\SMT32_103RB\IoT_Project\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="IoT_Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: IoT_Project.elf
+ 
+arm-none-eabi-size   IoT_Project.elf 
+arm-none-eabi-objdump -h -S  IoT_Project.elf  > "IoT_Project.list"
+arm-none-eabi-objcopy  -O ihex  IoT_Project.elf  "IoT_Project.hex"
+arm-none-eabi-objcopy  -O binary  IoT_Project.elf  "IoT_Project.bin"
+   text	   data	    bss	    dec	    hex	filename
+  34472	    492	   2212	  37176	   9138	IoT_Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: IoT_Project.hex
+Finished building: IoT_Project.bin
+ 
+ 
+Finished building: IoT_Project.list
+ 

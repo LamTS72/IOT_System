@@ -1,0 +1,48 @@
+
+#ifndef INC_DH11_H_
+#define INC_DH11_H_
+
+#include "timer.h"
+#include "lcd.h"
+#include "main.h"
+#include "stdio.h"
+
+#define C 1
+#define F 2
+
+extern uint8_t cmd_flag;
+extern float temp_C;
+extern float temp_F;
+extern float humidity;
+extern char humid_buffer[20];
+extern char temp_buffer[20];
+
+#define INIT 0
+#define QUEUING 1
+#define SERVING 2
+
+
+#define MAX_CMD_SIZE 6
+#define MAX_BUFFER_SIZE 30
+
+extern uint8_t buffer_byte;
+extern uint8_t buffer[MAX_BUFFER_SIZE];
+extern uint8_t index_buffer;
+extern uint8_t buffer_flag;
+
+extern int mode;
+extern uint8_t cmd_data[MAX_CMD_SIZE];
+extern uint8_t cmd_data_index;
+extern uint8_t request_flag;
+extern uint8_t request_check;
+
+//uint32_t DWT_Delay_Init();
+void DH11_Init(void);
+void Set_Pin_Output (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
+void Set_Pin_Input (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
+void DHT11_Start(void);
+uint8_t DHT11_Check_Response(void);
+uint8_t DHT11_Read_Byte(void);
+void Read_from_DHT11(void);
+void Display_Data_from_DHT11(void);
+#endif /* INC_DH11_H_ */

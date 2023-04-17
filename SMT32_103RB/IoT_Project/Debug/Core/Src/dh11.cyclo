@@ -1,0 +1,7 @@
+dh11.c:15:6:Set_Pin_Output	1
+dh11.c:24:6:Set_Pin_Input	1
+dh11.c:33:6:DHT11_Start	1
+dh11.c:41:9:DHT11_Check_Response	4
+dh11.c:53:9:DHT11_Read_Byte	5
+dh11.c:69:6:Read_from_DHT11	5
+dh11.c:94:6:Send_Data_from_DHT11	4

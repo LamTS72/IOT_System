@@ -1,0 +1,4 @@
+timer.c:4:6:delay_us	2
+timer.c:11:6:setTimerMS	1
+timer.c:15:6:timerRun	3
+timer.c:24:6:timerInit	1

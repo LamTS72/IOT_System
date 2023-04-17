@@ -1,0 +1,11 @@
+
+#ifndef INC_UART_H_
+#define INC_UART_H_
+
+#include "main.h"
+#include "dh11.h"
+
+
+int isNum(uint8_t str[], int idx);
+
+#endif /* INC_UART_H_ */

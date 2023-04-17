@@ -1,0 +1,25 @@
+
+#ifndef INC_SCHEDULER_H_
+#define INC_SCHEDULER_H_
+
+#include "stdint.h"
+#include "stdio.h"
+
+extern int check_dispatch;
+extern uint32_t time;
+
+void SCH_Init(void);
+
+unsigned char SCH_Add_Task(void (*pFunction)(), unsigned int DELAY, unsigned int PERIOD);
+
+unsigned char SCH_Delete_Task(unsigned char taskID);
+
+void SCH_Update(void);
+
+void SCH_Dispatch_Tasks(int check_dispatchs , uint32_t time, void (*pFunction)());
+
+void SCH_Report_Status(void);
+
+void SCH_Go_To_Sleep();
+
+#endif /* INC_SCHEDULER_H_ */
