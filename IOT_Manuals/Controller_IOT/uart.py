@@ -2,14 +2,15 @@
 import time
 
 import serial.tools.list_ports
-from GateWay.Helpier_Signal import *
+from Controller_IOT.Helpier_Signal import *
 import sys
 
 st = State()
 state = st.CONNECTED
 try_times = 0
 timer_counter = st.TIME_OVER
-counter = 100
+counter_default = 100
+period_default = 100
 
 #search port available -> but hardcode so return specific COM
 def getPort():
@@ -172,3 +173,4 @@ def write2Device_Button2(payload):
         writeData(Sign_Button['BUTTON2_OFF'].value)
     elif payload == Sign_Payload['PAYLOAD_ON'].value:
         writeData(Sign_Button['BUTTON2_ON'].value)
+
